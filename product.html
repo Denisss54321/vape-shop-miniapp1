@@ -1,33 +1,47 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>WAKA 10000</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Waka 10000</title>
+  <link rel="stylesheet" href="style.css" />
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-  <div id="product"></div>
-  <button onclick="history.back()">⬅ Вернуться в каталог</button>
-  <button onclick="addToCart()">🛒 Добавить в корзину</button>
+  <h1 class="centered-title">Waka 10000</h1>
+
+  <div class="product-details">
+    <img src="waka10000.jpg" alt="Waka 10000" />
+    <p>Одноразовая электронная сигарета Waka на 10000 затяжек — идеальный выбор для длительного использования.</p>
+    
+    <h3>Вкусы:</h3>
+    <ul>
+      <li>Манго</li>
+      <li>Арбуз</li>
+      <li>Черника</li>
+      <li>Клубника-киви</li>
+    </ul>
+
+    <button class="back-button" onclick="window.history.back()">← Назад</button>
+    <button onclick="addToCart()">Добавить в корзину</button>
+  </div>
 
   <script>
-    const product = JSON.parse(localStorage.getItem("tg_selected") || "{}");
-
-    const container = document.getElementById("product");
-    container.innerHTML = `
-      <h1>${product.name}</h1>
-      <img src="${product.image}" alt="${product.name}" style="max-width:200px"/>
-      <p>${product.description}</p>
-      <h4>Вкусы:</h4>
-      <ul>${product.flavors.map(f => `<li>${f}</li>`).join('')}</ul>
-      <p><b>Цена:</b> ${product.price} ₸</p>
-    `;
-
     function addToCart() {
+      const product = {
+        name: "Waka 10000",
+        price: 4500,
+        image: "waka10000.jpg"
+      };
+
       const cart = JSON.parse(localStorage.getItem("tg_cart") || "[]");
       cart.push(product);
       localStorage.setItem("tg_cart", JSON.stringify(cart));
+
+      if (window.Telegram.WebApp) {
+        Telegram.WebApp.HapticFeedback.notificationOccurred("success");
+      }
+
       alert("Товар добавлен в корзину!");
     }
   </script>
