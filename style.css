@@ -83,3 +83,10 @@ form label {
   background: #ccc;
   color: #000;
 }
+
+.centered-title {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
