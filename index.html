@@ -12,9 +12,18 @@
 
   <div id="products"></div>
 
+  <!-- Кнопка оформления заказа -->
+  <button id="checkoutBtn" class="checkout-btn" style="display: none;">🧾 Оформить заказ</button>
+
   <script src="products.js"></script>
   <script>
     const container = document.getElementById("products");
+    const checkoutBtn = document.getElementById("checkoutBtn");
+
+    const cart = JSON.parse(localStorage.getItem("tg_cart") || "[]");
+    if (cart.length > 0) {
+      checkoutBtn.style.display = "block";
+    }
 
     products.forEach(p => {
       const block = document.createElement("div");
@@ -30,6 +39,10 @@
       };
       container.appendChild(block);
     });
+
+    checkoutBtn.onclick = () => {
+      window.location.href = "checkout.html";
+    };
   </script>
 </body>
 </html>
