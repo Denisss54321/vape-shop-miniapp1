@@ -185,3 +185,51 @@ form {
 /* Изображения */
 .product-card img,
 .p
+
+/* Изображения */
+.product-card img,
+.product-details img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+}
+
+/* Кнопка "Оформить заказ" закреплённая внизу */
+.checkout-btn {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background: rgba(0, 136, 204, 0.9);
+  color: white;
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  backdrop-filter: blur(4px);
+}
+
+.checkout-btn:hover {
+  background: rgba(0, 122, 184, 1);
+}
+
+/* Улучшения адаптивности */
+@media (max-width: 480px) {
+  .product-card,
+  .product-details,
+  form {
+    padding: 0.75rem;
+    border-radius: 10px;
+  }
+
+  .checkout-btn {
+    font-size: 0.95rem;
+    padding: 0.65rem 1.2rem;
+  }
+}
+
