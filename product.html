@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>WAKA 10000</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <div id="product"></div>
+  <button onclick="history.back()">⬅ Вернуться в каталог</button>
+  <button onclick="addToCart()">🛒 Добавить в корзину</button>
+
+  <script>
+    const product = JSON.parse(localStorage.getItem("tg_selected") || "{}");
+
+    const container = document.getElementById("product");
+    container.innerHTML = `
+      <h1>${product.name}</h1>
+      <img src="${product.image}" alt="${product.name}" style="max-width:200px"/>
+      <p>${product.description}</p>
+      <h4>Вкусы:</h4>
+      <ul>${product.flavors.map(f => `<li>${f}</li>`).join('')}</ul>
+      <p><b>Цена:</b> ${product.price} ₸</p>
+    `;
+
+    function addToCart() {
+      const cart = JSON.parse(localStorage.getItem("tg_cart") || "[]");
+      cart.push(product);
+      localStorage.setItem("tg_cart", JSON.stringify(cart));
+      alert("Товар добавлен в корзину!");
+    }
+  </script>
+</body>
+</html>
