@@ -185,3 +185,25 @@ form {
 /* Изображения */
 .product-card img,
 .p
+
+.checkout-btn {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  background: rgba(0, 136, 204, 0.9);
+  color: white;
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.checkout-btn:hover {
+  background: rgba(0, 122, 184, 1);
+}
+
