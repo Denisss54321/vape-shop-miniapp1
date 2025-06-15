@@ -34,4 +34,37 @@
 </body>
 </html>
 
-<button id="checkoutBtn" class="checkout-btn">🧾 Оформить заказ</button>
+  <div id="products"></div>
+
+  <button id="checkoutBtn" class="checkout-btn" style="display: none;">🧾 Оформить заказ</button>
+
+  <script src="products.js"></script>
+  <script>
+    const container = document.getElementById("products");
+    const checkoutBtn = document.getElementById("checkoutBtn");
+    const cart = JSON.parse(localStorage.getItem("tg_cart") || "[]");
+
+    if (cart.length > 0) {
+      checkoutBtn.style.display = "block";
+    }
+
+    products.forEach(p => {
+      const block = document.createElement("div");
+      block.className = "product-card";
+      block.innerHTML = `
+        <img src="${p.image}" alt="${p.name}" />
+        <h3>${p.name}</h3>
+        <p>${p.price} ₸</p>
+      `;
+      block.onclick = () => {
+        localStorage.setItem("tg_selected", JSON.stringify(p));
+        window.location.href = "product.html";
+      };
+      container.appendChild(block);
+    });
+
+    checkoutBtn.onclick = () => {
+      window.location.href = "checkout.html";
+    };
+  </script>
+
