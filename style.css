@@ -131,3 +131,36 @@ select {
   border-radius: 8px;
   font-size: 1rem;
 }
+
+body {
+  background-image: url('background.JPEG');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: white; /* Белый текст */
+}
+
+/* Затемнение фона для лучшей читаемости текста */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5); /* полупрозрачное затемнение */
+  z-index: -1;
+}
+
+/* Чтобы карточки товара были полупрозрачными */
+.product-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Название по центру */
+h1.centered-title,
+h1 {
+  text-align: center;
+  color: white;
+}
