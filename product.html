@@ -13,14 +13,15 @@
   <div class="product-details">
     <img src="waka10000.JPEG" alt="Waka 10000" />
     <p>Одноразовая электронная сигарета Waka на 10000 затяжек — идеальный выбор для длительного использования.</p>
-    
-    <h3>Вкусы:</h3>
-    <ul>
-      <li>Манго</li>
-      <li>Арбуз</li>
-      <li>Черника</li>
-      <li>Клубника-киви</li>
-    </ul>
+
+    <h3>Выберите вкус:</h3>
+    <select id="flavorSelect">
+      <option value="">-- Выберите вкус --</option>
+      <option value="Манго">Манго</option>
+      <option value="Арбуз">Арбуз</option>
+      <option value="Черника">Черника</option>
+      <option value="Клубника-киви">Клубника-киви</option>
+    </select>
 
     <button class="back-button" onclick="window.history.back()">← Назад</button>
     <button onclick="addToCart()">Добавить в корзину</button>
@@ -28,10 +29,17 @@
 
   <script>
     function addToCart() {
+      const flavor = document.getElementById("flavorSelect").value;
+      if (!flavor) {
+        alert("Пожалуйста, выберите вкус перед добавлением в корзину.");
+        return;
+      }
+
       const product = {
-        name: "Waka 10000",
+        name: `Waka 10000 (${flavor})`,
         price: 4500,
-        image: "waka10000.JPEG"
+        image: "waka10000.JPEG",
+        flavor: flavor
       };
 
       const cart = JSON.parse(localStorage.getItem("tg_cart") || "[]");
@@ -42,7 +50,7 @@
         Telegram.WebApp.HapticFeedback.notificationOccurred("success");
       }
 
-      alert("Товар добавлен в корзину!");
+      alert(`Добавлено в корзину: Waka 10000 (${flavor})`);
     }
   </script>
 </body>
