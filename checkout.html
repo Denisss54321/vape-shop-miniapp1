@@ -138,3 +138,51 @@
   </script>
 </body>
 </html>
+
+<script>
+  const tg = window.Telegram.WebApp;
+  tg.expand();
+
+  let cart = JSON.parse(localStorage.getItem("tg_cart") || "[]");
+  const info = document.getElementById("orderInfo");
+
+  function renderCart() {
+    info.innerHTML = "";
+    if (cart.length === 0) {
+      info.innerHTML = "<p>Корзина пуста</p>";
+      document.getElementById("orderForm").style.display = "none";
+      return;
+    }
+
+    cart.forEach((p, index) => {
+      const item = document.createElement("div");
+      item.innerHTML = `
+        <p>${p.name} — ${p.price}₸
+          <button onclick="removeItem(${index})" style="margin-left: 10px; background: red; color: white; border: none; border-radius: 6px; padding: 4px 8px; font-size: 0.8rem; cursor: pointer;">Удалить</button>
+        </p>
+      `;
+      info.appendChild(item);
+    });
+  }
+
+  window.removeItem = function(index) {
+    cart.splice(index, 1);
+    localStorage.setItem("tg_cart", JSON.stringify(cart));
+    renderCart();
+  };
+
+  document.getElementById("orderForm").addEventListener("submit", e => {
+    e.preventDefault();
+    const form = e.target;
+    const order = {
+      cart,
+      address: form.address.value,
+      phone: form.phone.value,
+      payment: form.payment.value
+    };
+    tg.sendData(JSON.stringify(order));
+  });
+
+  renderCart();
+</script>
+
