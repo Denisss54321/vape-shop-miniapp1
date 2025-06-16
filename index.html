@@ -13,11 +13,7 @@
       margin: 0;
       padding: 1rem;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
-      background-image: url('background.jpeg');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
+      background: none;
       color: white;
       min-height: 100vh;
       max-width: 480px;
@@ -27,135 +23,123 @@
       overflow-x: hidden;
     }
 
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: url('background.JPEG'); /* ← укажи путь к твоему фону */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      z-index: -2;
+    }
+
     body::before {
       content: "";
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.5); /* Затемнение фона */
+      background: rgba(0, 0, 0, 0.5);
       z-index: -1;
     }
 
     h1 {
       text-align: center;
-      font-size: 1.8rem;
+      font-size: 1.75rem;
       margin-bottom: 1.5rem;
     }
 
-    .carousel-container {
-      width: 100%;
-      overflow: hidden;
-      border-radius: 12px;
-      margin-bottom: 2rem;
-    }
-
-    .carousel-track {
+    .news-carousel {
       display: flex;
-      transition: transform 0.4s ease;
-      will-change: transform;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 1rem;
+      padding-bottom: 1rem;
+      scroll-behavior: smooth;
     }
 
-    .slide {
-      flex: 0 0 100%;
-      width: 100%;
-      height: 180px;
+    .news-carousel::-webkit-scrollbar {
+      display: none;
+    }
+
+    .news-card {
+      min-width: 90%;
       background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.3);
       backdrop-filter: blur(8px);
-      color: white;
-      text-align: center;
-      line-height: 180px;
-      font-size: 1.2rem;
+      padding: 1rem;
       border-radius: 12px;
-      margin-right: 0.5rem;
+      color: white;
+      scroll-snap-align: start;
+      flex-shrink: 0;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
     }
 
-    .buttons {
+    .news-card img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+    }
+
+    .button-group {
       display: flex;
       flex-direction: column;
       gap: 1rem;
+      margin-top: 2rem;
     }
 
-    .btn {
+    .button-group button {
       padding: 1rem;
-      background: rgba(0, 136, 204, 0.9);
-      color: white;
+      font-size: 1.1rem;
       border: none;
       border-radius: 10px;
-      font-size: 1rem;
-      text-align: center;
+      background: rgba(0, 136, 204, 0.9);
+      color: white;
       cursor: pointer;
-      transition: background 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      backdrop-filter: blur(4px);
     }
 
-    .btn:hover {
+    .button-group button:hover {
       background: rgba(0, 122, 184, 1);
     }
   </style>
 </head>
 <body>
-
   <h1>PROJECT:SECRET</h1>
 
-  <div class="carousel-container">
-    <div class="carousel-track" id="carouselTrack">
-      <div class="slide">Новость 1</div>
-      <div class="slide">Новость 2</div>
-      <div class="slide">Новость 3</div>
+  <div class="news-carousel" id="carousel">
+    <div class="news-card">
+      <img src="news1.jpg" alt="Новость 1" />
+      <p>Описание новости 1</p>
+    </div>
+    <div class="news-card">
+      <img src="news2.jpg" alt="Новость 2" />
+      <p>Описание новости 2</p>
+    </div>
+    <div class="news-card">
+      <img src="news3.jpg" alt="Новость 3" />
+      <p>Описание новости 3</p>
     </div>
   </div>
 
-  <div class="buttons">
-    <button class="btn" onclick="location.href='catalog.html'">Каталог</button>
-    <button class="btn" onclick="location.href='bonus.html'">Бонусный магазин</button>
+  <div class="button-group">
+    <button onclick="location.href='catalog.html'">Каталог</button>
+    <button onclick="location.href='bonus.html'">Бонусный магазин</button>
   </div>
 
   <script>
-    const track = document.getElementById('carouselTrack');
-    const slides = track.children;
-    const totalSlides = slides.length;
+    // Автопрокрутка новостей
+    const carousel = document.getElementById("carousel");
+    let scrollIndex = 0;
 
-    let index = 0;
-    let startX = 0;
-    let currentX = 0;
-    let isDragging = false;
-
-    function goToSlide(i) {
-      index = (i + totalSlides) % totalSlides;
-      track.style.transition = 'transform 0.4s ease';
-      track.style.transform = `translateX(-${index * 100}%)`;
-    }
-
-    let autoSlide = setInterval(() => goToSlide(index + 1), 5000);
-
-    track.addEventListener('touchstart', e => {
-      startX = e.touches[0].clientX;
-      isDragging = true;
-      track.style.transition = 'none';
-      clearInterval(autoSlide);
-    });
-
-    track.addEventListener('touchmove', e => {
-      if (!isDragging) return;
-      currentX = e.touches[0].clientX;
-      const deltaX = currentX - startX;
-      track.style.transform = `translateX(calc(-${index * 100}% + ${deltaX}px))`;
-    });
-
-    track.addEventListener('touchend', () => {
-      isDragging = false;
-      const deltaX = currentX - startX;
-      if (Math.abs(deltaX) > 50) {
-        if (deltaX < 0) {
-          goToSlide(index + 1);
-        } else {
-          goToSlide(index - 1);
-        }
-      } else {
-        goToSlide(index);
+    setInterval(() => {
+      scrollIndex++;
+      if (scrollIndex >= carousel.children.length) {
+        scrollIndex = 0;
       }
-      autoSlide = setInterval(() => goToSlide(index + 1), 5000);
-    });
+      const cardWidth = carousel.children[0].offsetWidth + 16; // 16 — gap
+      carousel.scrollTo({ left: scrollIndex * cardWidth, behavior: "smooth" });
+    }, 5000);
   </script>
-
 </body>
 </html>
