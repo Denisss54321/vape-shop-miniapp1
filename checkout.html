@@ -21,6 +21,8 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      font-size: 16px;
+      line-height: 1.4;
     }
 
     .cart-item.removing {
@@ -34,9 +36,11 @@
       color: #c00;
       font-size: 20px;
       cursor: pointer;
-      padding: 0 6px;
+      padding: 0;
       line-height: 1;
-      transition: color 0.2s ease;
+      display: flex;
+      align-items: center;
+      height: 100%;
     }
 
     .remove-btn:hover {
@@ -105,9 +109,7 @@
 
         div.innerHTML = `
           <div class="cart-text">${index + 1}. ${item.name} — ${item.price} ₸</div>
-          <div style="flex-shrink: 0;">
-            <button class="remove-btn" title="Удалить" data-index="${index}">×</button>
-          </div>
+          <button class="remove-btn" title="Удалить" data-index="${index}">×</button>
         `;
 
         cartItemsContainer.appendChild(div);
