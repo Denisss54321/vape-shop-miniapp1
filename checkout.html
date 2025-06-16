@@ -13,6 +13,14 @@
       align-items: center;
       margin: 5px 0;
       transition: opacity 0.4s ease, transform 0.4s ease;
+      gap: 10px;
+    }
+
+    .cart-text {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .cart-item.removing {
@@ -95,7 +103,7 @@
         div.dataset.index = index;
 
         div.innerHTML = `
-          <span>${index + 1}. ${item.name} — ${item.price} ₸</span>
+          <span class="cart-text">${index + 1}. ${item.name} — ${item.price} ₸</span>
           <button class="remove-btn" title="Удалить" data-index="${index}">×</button>
         `;
 
@@ -151,4 +159,3 @@
   </script>
 </body>
 </html>
-
