@@ -21,20 +21,17 @@
     }
 
     .remove-btn {
-      background-color: red;
-      color: white;
+      background: none;
       border: none;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      font-size: 16px;
-      line-height: 24px;
-      text-align: center;
+      color: #c00;
+      font-size: 20px;
       cursor: pointer;
+      padding: 0 6px;
+      line-height: 1;
     }
 
     .remove-btn:hover {
-      background-color: darkred;
+      color: #900;
     }
   </style>
 </head>
@@ -107,9 +104,8 @@
 
       totalSumEl.textContent = total;
 
-      // Обработка удаления
       document.querySelectorAll(".remove-btn").forEach(btn => {
-        btn.onclick = (e) => {
+        btn.onclick = () => {
           const index = parseInt(btn.dataset.index);
           const itemDiv = btn.closest(".cart-item");
 
