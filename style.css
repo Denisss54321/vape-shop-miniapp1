@@ -100,23 +100,25 @@ form {
 button {
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
-  background: #1c1c1c;
+  background: rgba(0, 0, 0, 0.6);
   color: white;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   width: 100%;
   margin-top: 1rem;
+  opacity: 0.7;
 }
 
 button:hover {
-  background: #1c1c1c;
+  background: rgba(0, 0, 0, 0.6);
+  opacity: 0.7;
 }
 
 /* Кнопка "Назад" */
 .back-button {
-  background: #1c1c1c;
-  color: #000;
+  background: rgba(0, 0, 0, 0.6);
+  color: #ffffff;
   margin-bottom: 1rem;
   width: 100%;
   text-align: center;
@@ -125,6 +127,7 @@ button:hover {
   font-size: 1rem;
   cursor: pointer;
   border: none;
+  opacity: 0.7;
 }
 
 /* Кнопка "Оформить заказ" снизу */
