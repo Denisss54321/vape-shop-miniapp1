@@ -35,18 +35,26 @@
         <p>${p.price} ₸</p>
       `;
       block.onclick = () => {
-        // Только передаём выбранный товар, не добавляем в корзину
         localStorage.setItem("tg_selected", JSON.stringify(p));
         window.location.href = "product.html";
       };
       container.appendChild(block);
     });
 
+    // Обновляем кнопку при возвращении на страницу
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) {
+        updateCheckoutButton();
+      }
+    });
+
+    // Также при загрузке
+    window.addEventListener("DOMContentLoaded", updateCheckoutButton);
+
+    // Переход к оформлению
     checkoutBtn.onclick = () => {
       window.location.href = "checkout.html";
     };
-
-    window.addEventListener("DOMContentLoaded", updateCheckoutButton);
   </script>
 </body>
 </html>
