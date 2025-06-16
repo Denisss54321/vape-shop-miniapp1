@@ -17,7 +17,7 @@
     }
 
     .cart-text {
-      flex: 1;
+      flex-grow: 1;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -36,6 +36,7 @@
       cursor: pointer;
       padding: 0 6px;
       line-height: 1;
+      transition: color 0.2s ease;
     }
 
     .remove-btn:hover {
@@ -103,8 +104,10 @@
         div.dataset.index = index;
 
         div.innerHTML = `
-          <span class="cart-text">${index + 1}. ${item.name} — ${item.price} ₸</span>
-          <button class="remove-btn" title="Удалить" data-index="${index}">×</button>
+          <div class="cart-text">${index + 1}. ${item.name} — ${item.price} ₸</div>
+          <div style="flex-shrink: 0;">
+            <button class="remove-btn" title="Удалить" data-index="${index}">×</button>
+          </div>
         `;
 
         cartItemsContainer.appendChild(div);
