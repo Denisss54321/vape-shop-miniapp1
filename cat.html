@@ -9,47 +9,43 @@
   <style>
     body {
       margin: 0;
-      padding-bottom: 130px; /* место под фиксированные кнопки */
+      padding-bottom: 140px; /* место под фиксированные кнопки */
       font-family: sans-serif;
-      background-color: #000; /* если нет фона */
     }
 
     .centered-title {
       text-align: center;
-      font-size: 1.5rem;
-      margin: 1rem 0;
       color: white;
+      margin-top: 20px;
     }
 
     #products {
-      padding: 0 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      padding: 20px;
     }
 
-    .checkout-btn,
-    .home-btn {
-      width: 90%;
-      max-width: 400px;
-      padding: 1rem;
-      font-size: 1rem;
-      border: none;
+    .product-card {
+      background-color: rgba(0, 0, 0, 0.8);
       border-radius: 12px;
-      background: rgba(0, 0, 0, 0.8); /* тёмный цвет с прозрачностью */
+      padding: 10px;
       color: white;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      backdrop-filter: blur(4px);
-      margin: 0.3rem auto;
-      display: block;
-
-      /* Плавное появление */
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 0.6s ease forwards;
+      width: 160px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      transition: transform 0.2s ease;
     }
 
-    .checkout-btn:hover,
-    .home-btn:hover {
-      background: rgba(30, 30, 30, 0.9);
+    .product-card:hover {
+      transform: scale(1.05);
+    }
+
+    .product-card img {
+      width: 100%;
+      border-radius: 8px;
+      margin-bottom: 10px;
     }
 
     .fixed-buttons {
@@ -60,15 +56,30 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.5rem;
-      z-index: 10;
+      gap: 10px;
+      z-index: 1000;
+      padding: 0 1rem;
     }
 
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .checkout-btn,
+    .home-btn {
+      width: 90%;
+      max-width: 300px;
+      padding: 1rem;
+      font-size: 0.95rem;
+      border: none;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(4px);
+      transition: background 0.3s ease;
+    }
+
+    .checkout-btn:hover,
+    .home-btn:hover {
+      background: rgba(30, 30, 30, 0.9);
     }
   </style>
 </head>
@@ -77,10 +88,10 @@
 
   <div id="products"></div>
 
-  <!-- Фиксированные кнопки внизу -->
+  <!-- Фиксированные кнопки -->
   <div class="fixed-buttons">
-    <button id="checkoutBtn" class="checkout-btn" style="display: none;">🧾 Оформить заказ</button>
     <button class="home-btn" onclick="location.href='index.html'">🏠 На главную</button>
+    <button id="checkoutBtn" class="checkout-btn" style="display: none;">🧾 Оформить заказ</button>
   </div>
 
   <script src="products.js"></script>
@@ -93,6 +104,7 @@
       checkoutBtn.style.display = cart.length > 0 ? "block" : "none";
     }
 
+    // Отрисовка карточек товаров
     products.forEach(p => {
       const block = document.createElement("div");
       block.className = "product-card";
@@ -108,14 +120,17 @@
       container.appendChild(block);
     });
 
+    // Обновление кнопки при возвращении
     document.addEventListener("visibilitychange", () => {
       if (!document.hidden) {
         updateCheckoutButton();
       }
     });
 
+    // Также при загрузке
     window.addEventListener("DOMContentLoaded", updateCheckoutButton);
 
+    // Переход к оформлению
     checkoutBtn.onclick = () => {
       window.location.href = "checkout.html";
     };
