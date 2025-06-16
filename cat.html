@@ -20,11 +20,17 @@
     const container = document.getElementById("products");
     const checkoutBtn = document.getElementById("checkoutBtn");
 
-    const cart = JSON.parse(localStorage.getItem("tg_cart") || "[]");
-    if (cart.length > 0) {
-      checkoutBtn.style.display = "block";
+    // Функция отображения кнопки
+    function updateCheckoutButton() {
+      const cart = JSON.parse(localStorage.getItem("tg_cart") || "[]");
+      if (cart.length > 0) {
+        checkoutBtn.style.display = "block";
+      } else {
+        checkoutBtn.style.display = "none";
+      }
     }
 
+    // Отрисовка карточек товаров
     products.forEach(p => {
       const block = document.createElement("div");
       block.className = "product-card";
@@ -34,15 +40,27 @@
         <p>${p.price} ₸</p>
       `;
       block.onclick = () => {
+        // Добавляем товар в корзину
+        let cart = JSON.parse(localStorage.getItem("tg_cart") || "[]");
+        cart.push(p);
+        localStorage.setItem("tg_cart", JSON.stringify(cart));
+
+        updateCheckoutButton(); // Обновляем видимость кнопки
+
+        // Переход на страницу товара
         localStorage.setItem("tg_selected", JSON.stringify(p));
         window.location.href = "product.html";
       };
       container.appendChild(block);
     });
 
+    // Кнопка перехода к оформлению
     checkoutBtn.onclick = () => {
       window.location.href = "checkout.html";
     };
+
+    // Проверка при загрузке
+    window.addEventListener("DOMContentLoaded", updateCheckoutButton);
   </script>
 </body>
 </html>
