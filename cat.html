@@ -7,92 +7,35 @@
   <link rel="stylesheet" href="style.css" />
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    body {
-      margin: 0;
-      padding-bottom: 140px; /* место под фиксированные кнопки */
-      font-family: sans-serif;
-    }
-
-    .centered-title {
-      text-align: center;
-      color: white;
-      margin-top: 20px;
-    }
-
-    #products {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 16px;
-      padding: 20px;
-    }
-
-    .product-card {
-      background-color: rgba(0, 0, 0, 0.8);
-      border-radius: 12px;
-      padding: 10px;
-      color: white;
-      width: 160px;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-      transition: transform 0.2s ease;
-    }
-
-    .product-card:hover {
-      transform: scale(1.05);
-    }
-
-    .product-card img {
-      width: 100%;
-      border-radius: 8px;
-      margin-bottom: 10px;
-    }
-
-    .fixed-buttons {
-      position: fixed;
-      bottom: 20px;
-      left: 0;
-      right: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      z-index: 1000;
-      padding: 0 1rem;
-    }
-
-    .checkout-btn,
     .home-btn {
-      width: 90%;
-      max-width: 300px;
-      padding: 1rem;
-      font-size: 0.95rem;
-      border: none;
-      border-radius: 12px;
-      background: rgba(0, 0, 0, 0.8);
+      display: block;
+      margin: 10px auto 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: rgba(0, 0, 0, 0.6);
       color: white;
+      border: none;
+      border-radius: 10px;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(4px);
-      transition: background 0.3s ease;
+      opacity: 0.7;
+      transition: opacity 0.3s ease;
     }
 
-    .checkout-btn:hover,
     .home-btn:hover {
-      background: rgba(30, 30, 30, 0.9);
+      opacity: 1;
     }
   </style>
 </head>
 <body>
   <h1 class="centered-title">Каталог</h1>
 
+  <!-- Кнопка "На главную" -->
+  <button class="home-btn" onclick="location.href='index.html'">🏠 На главную</button>
+
   <div id="products"></div>
 
-  <!-- Фиксированные кнопки -->
-  <div class="fixed-buttons">
-    <button class="home-btn" onclick="location.href='index.html'">🏠 На главную</button>
-    <button id="checkoutBtn" class="checkout-btn" style="display: none;">🧾 Оформить заказ</button>
-  </div>
+  <!-- Кнопка оформления заказа -->
+  <button id="checkoutBtn" class="checkout-btn" style="display: none;">🧾 Оформить заказ</button>
 
   <script src="products.js"></script>
   <script>
@@ -120,7 +63,7 @@
       container.appendChild(block);
     });
 
-    // Обновление кнопки при возвращении
+    // Обновляем кнопку при возвращении на страницу
     document.addEventListener("visibilitychange", () => {
       if (!document.hidden) {
         updateCheckoutButton();
