@@ -6,6 +6,37 @@
   <title>Оформление заказа</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 5px 0;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .cart-item.removing {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+
+    .remove-btn {
+      background-color: red;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      font-size: 16px;
+      line-height: 24px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .remove-btn:hover {
+      background-color: darkred;
+    }
+  </style>
 </head>
 <body>
   <!-- Кнопка возврата -->
@@ -15,7 +46,12 @@
 
   <h1 class="centered-title">Оформление заказа</h1>
 
-  <div id="orderInfo" class="product-card"></div>
+  <div id="orderInfo" class="product-card">
+    <h3>Ваш заказ:</h3>
+    <div id="cartItems"></div>
+    <hr>
+    <p><strong>Итого: <span id="totalSum">0</span> ₸</strong></p>
+  </div>
 
   <form id="orderForm">
     <label for="phone">Номер телефона</label>
@@ -39,23 +75,64 @@
   </form>
 
   <script>
-    const orderInfo = document.getElementById("orderInfo");
-    const cart = JSON.parse(localStorage.getItem("tg_cart") || "[]");
+    const cartItemsContainer = document.getElementById("cartItems");
+    const totalSumEl = document.getElementById("totalSum");
 
-    if (cart.length === 0) {
-      orderInfo.innerHTML = "<p>Корзина пуста.</p>";
-    } else {
+    let cart = JSON.parse(localStorage.getItem("tg_cart") || "[]");
+
+    function renderCart() {
+      cartItemsContainer.innerHTML = "";
+      if (cart.length === 0) {
+        cartItemsContainer.innerHTML = "<p>Корзина пуста.</p>";
+        totalSumEl.textContent = "0";
+        return;
+      }
+
       let total = 0;
-      orderInfo.innerHTML = "<h3>Ваш заказ:</h3>";
+
       cart.forEach((item, index) => {
         total += item.price;
-        orderInfo.innerHTML += `<p>${index + 1}. ${item.name} — ${item.price} ₸</p>`;
+
+        const div = document.createElement("div");
+        div.className = "cart-item";
+        div.dataset.index = index;
+
+        div.innerHTML = `
+          <span>${index + 1}. ${item.name} — ${item.price} ₸</span>
+          <button class="remove-btn" title="Удалить" data-index="${index}">×</button>
+        `;
+
+        cartItemsContainer.appendChild(div);
       });
-      orderInfo.innerHTML += `<hr><p><strong>Итого: ${total} ₸</strong></p>`;
+
+      totalSumEl.textContent = total;
+
+      // Обработка удаления
+      document.querySelectorAll(".remove-btn").forEach(btn => {
+        btn.onclick = (e) => {
+          const index = parseInt(btn.dataset.index);
+          const itemDiv = btn.closest(".cart-item");
+
+          // Анимация удаления
+          itemDiv.classList.add("removing");
+          setTimeout(() => {
+            cart.splice(index, 1);
+            localStorage.setItem("tg_cart", JSON.stringify(cart));
+            renderCart();
+          }, 400);
+        };
+      });
     }
+
+    window.addEventListener("DOMContentLoaded", renderCart);
 
     document.getElementById("orderForm").addEventListener("submit", function(e) {
       e.preventDefault();
+
+      if (cart.length === 0) {
+        alert("Корзина пуста.");
+        return;
+      }
 
       const phone = document.getElementById("phone").value;
       const address = document.getElementById("address").value;
@@ -68,7 +145,7 @@
         items: cart,
       };
 
-      // Здесь будет отправка заказа в телеграм-бот (имитация)
+      // Имитация отправки
       console.log("Заказ:", order);
 
       alert("Ваш заказ отправлен!");
@@ -78,3 +155,4 @@
   </script>
 </body>
 </html>
+
