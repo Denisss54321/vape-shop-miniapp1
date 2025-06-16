@@ -100,7 +100,7 @@ form {
 button {
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
-  background: #0088cc;
+  background: #1c1c1c;
   color: white;
   border: none;
   border-radius: 10px;
@@ -110,12 +110,12 @@ button {
 }
 
 button:hover {
-  background: #007ab8;
+  background: #1c1c1c;
 }
 
 /* Кнопка "Назад" */
 .back-button {
-  background: #ccc;
+  background: #1c1c1c;
   color: #000;
   margin-bottom: 1rem;
   width: 100%;
@@ -134,7 +134,7 @@ button:hover {
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;
-  background: rgba(0, 136, 204, 0.9);
+  background: #1c1c1c;
   color: white;
   font-size: 1rem;
   padding: 0.75rem 1.5rem;
