@@ -45,7 +45,6 @@
   </style>
 </head>
 <body>
-  <!-- Кнопка возврата -->
   <a href="cat.html" class="back-button" style="display: block; max-width: 100%; box-sizing: border-box; margin-bottom: 1rem;">
     ← В каталог
   </a>
@@ -72,7 +71,6 @@
       <option value="kaspi">Каспи</option>
     </select>
 
-    <!-- Информационный текст -->
     <p style="margin-top: 20px; margin-bottom: 10px; color: #666; font-size: 14px;">
       После отправки заказа с вами свяжется менеджер для подтверждения
     </p>
@@ -120,7 +118,6 @@
           const index = parseInt(btn.dataset.index);
           const itemDiv = btn.closest(".cart-item");
 
-          // Анимация удаления
           itemDiv.classList.add("removing");
           setTimeout(() => {
             cart.splice(index, 1);
@@ -133,7 +130,7 @@
 
     window.addEventListener("DOMContentLoaded", renderCart);
 
-    document.getElementById("orderForm").addEventListener("submit", function(e) {
+    document.getElementById("orderForm").addEventListener("submit", async function(e) {
       e.preventDefault();
 
       if (cart.length === 0) {
@@ -141,23 +138,50 @@
         return;
       }
 
-      const phone = document.getElementById("phone").value;
-      const address = document.getElementById("address").value;
+      const phone = document.getElementById("phone").value.trim();
+      const address = document.getElementById("address").value.trim();
       const payment = document.getElementById("payment").value;
 
-      const order = {
-        phone,
-        address,
-        payment,
-        items: cart,
-      };
+      const tg = window.Telegram.WebApp.initDataUnsafe?.user;
+      const username = tg?.username ? `@${tg.username}` : (phone || (tg?.first_name || "Пользователь"));
 
-      // Имитация отправки
-      console.log("Заказ:", order);
+      let total = cart.reduce((sum, item) => sum + item.price, 0);
+      const itemsList = cart.map((item, i) => `${i + 1}. ${item.name}`).join('\n');
 
-      alert("Ваш заказ отправлен!");
-      localStorage.removeItem("tg_cart");
-      window.location.href = "cat.html";
+      const orderText = `
+Новый заказ
+
+📦 Позиции:
+${itemsList}
+
+📱 Номер: ${phone || 'Не указан'}
+👤 Пользователь: ${username}
+🏠 Адрес: ${address}
+💰 Сумма: ${total} + 1000 доставка
+      `.trim();
+
+      const BOT_TOKEN = '8141919950:AAHKtnG4ziFfxlwWEYvexjuROx31LBWzIKg';
+      const CHAT_ID = '@legend_for_ur_mom';
+
+      try {
+        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            chat_id: CHAT_ID,
+            text: orderText
+          })
+        });
+
+        alert("Ваш заказ отправлен!");
+        localStorage.removeItem("tg_cart");
+        window.location.href = "cat.html";
+      } catch (error) {
+        alert("Ошибка при отправке заказа.");
+        console.error(error);
+      }
     });
   </script>
 </body>
