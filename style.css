@@ -163,12 +163,13 @@ form label {
 form input,
 form select,
 select {
-  width: 100%;
-  padding: 0.75rem;
-  margin: 0.25rem 0 1rem;
-  border: 1px solid #ccc;
+  background: rgba(255, 255, 255, 0.9);
+  color: black;
   border-radius: 8px;
+  padding: 0.75rem;
   font-size: 1rem;
+  border: none;
+  outline: none;
 }
 
 /* Детали товара */
