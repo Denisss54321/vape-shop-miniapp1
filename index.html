@@ -162,10 +162,12 @@
 💵 Сумма: ${data.sum} + 1000 доставка
       `.trim();
 
-      const BOT_TOKEN = '8141919950:AAHKtnG4ziFfxlwWEYvexjuROx31LBWzIKg';       // ← ЗАМЕНИ на свой
-      const CHAT_ID = '7170558675';       // ← ЗАМЕНИ на свой
+      const BOT_TOKEN = '8141919950:AAHKtnG4ziFfxlwWEYvexjuROx31LBWzIKg';
+      const CHAT_ID = '7170558675';
+      const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwJMyfgWiQj9FvaullZGCXfgDRHzNV6eCLBpCphtZcbsUc19fKu3Ift75KLqNbzgpgT/exec';
 
       try {
+        // Отправка в Telegram
         await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
           method: "POST",
           headers: {
@@ -175,6 +177,12 @@
             chat_id: CHAT_ID,
             text: text
           })
+        });
+
+        // Отправка в Google Таблицу
+        await fetch(SHEETS_URL, {
+          method: "POST",
+          body: JSON.stringify(data)
         });
 
         alert("Заказ отправлен! Менеджер скоро свяжется с вами.");
