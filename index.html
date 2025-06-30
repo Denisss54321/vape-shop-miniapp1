@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Оформление заказа</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -27,7 +28,7 @@
       content: "";
       position: fixed;
       inset: 0;
-      background-image: url('background.jpeg'); /* ← Фон */
+      background-image: url('background.jpeg');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -137,6 +138,8 @@
     document.getElementById("orderForm").addEventListener("submit", async (e) => {
       e.preventDefault();
 
+      const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+
       const data = {
         items: document.getElementById("items").value.trim(),
         username: document.getElementById("username").value.trim(),
@@ -146,18 +149,39 @@
         sum: document.getElementById("sum").value.trim(),
       };
 
+      const displayUsername = data.username || (tgUser?.username ? `@${tgUser.username}` : data.phone || tgUser?.first_name || "Неизвестный");
+
+      const text = `
+Новый заказ
+
+📦 Позиции: ${data.items}
+📱 Номер: ${data.phone}
+👤 Пользователь: ${displayUsername}
+🏠 Адрес: ${data.address}
+💰 Оплата: ${data.payment}
+💵 Сумма: ${data.sum} + 1000 доставка
+      `.trim();
+
+      const BOT_TOKEN = '8141919950:AAHKtnG4ziFfxlwWEYvexjuROx31LBWzIKg';       // ← ЗАМЕНИ на свой
+      const CHAT_ID = '7170558675';       // ← ЗАМЕНИ на свой
+
       try {
-        await fetch("/webapp-data", {
+        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            chat_id: CHAT_ID,
+            text: text
+          })
         });
 
         alert("Заказ отправлен! Менеджер скоро свяжется с вами.");
         document.getElementById("orderForm").reset();
-      } catch (err) {
+      } catch (error) {
         alert("Ошибка при отправке заказа.");
-        console.error(err);
+        console.error(error);
       }
     });
   </script>
