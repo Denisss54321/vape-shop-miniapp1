@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PROJECT:SECRET</title>
+  <title>Оформление заказа</title>
   <style>
     * {
       box-sizing: border-box;
@@ -27,7 +27,7 @@
       content: "";
       position: fixed;
       inset: 0;
-      background-image: url('background.jpeg'); /* ← путь к фону */
+      background-image: url('background.jpeg'); /* ← Фон */
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -49,102 +49,112 @@
       margin-bottom: 1.5rem;
     }
 
-    .news-carousel {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      gap: 1rem;
-      padding-bottom: 1rem;
-      scroll-behavior: smooth;
-    }
-
-    .news-carousel::-webkit-scrollbar {
-      display: none;
-    }
-
-    .news-card {
-      width: 100%;
-      max-width: 420px;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(8px);
-      padding: 1rem;
-      border-radius: 12px;
-      color: white;
-      scroll-snap-align: start;
-      flex-shrink: 0;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
-    }
-
-    .news-card img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-bottom: 0.5rem;
-      display: block;
-    }
-
-    .button-group {
+    form {
       display: flex;
       flex-direction: column;
       gap: 1rem;
-      margin-top: 2rem;
     }
 
-    .button-group button {
-      padding: 1rem;
-      font-size: 1.1rem;
+    input, textarea, select, button {
+      font-size: 1rem;
+      padding: 0.75rem;
+      border-radius: 8px;
       border: none;
-      border-radius: 10px;
+      outline: none;
+    }
+
+    input, textarea, select {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      backdrop-filter: blur(6px);
+    }
+
+    textarea {
+      resize: none;
+      min-height: 80px;
+    }
+
+    ::placeholder {
+      color: #ccc;
+    }
+
+    button {
       background: rgba(0, 0, 0, 0.6);
       color: white;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      backdrop-filter: blur(4px);
-      opacity: 0.7;
+      font-weight: bold;
+      transition: background 0.3s ease;
     }
 
-    .button-group button:hover {
+    button:hover {
       background: rgba(0, 122, 184, 1);
+    }
+
+    label {
+      font-size: 0.95rem;
+      color: #ccc;
     }
   </style>
 </head>
 <body>
-  <h1>PROJECT:SECRET</h1>
+  <h1>Оформление заказа</h1>
 
-  <div class="news-carousel" id="carousel">
-    <div class="news-card">
-      <img src="news1.JPEG" alt="Новость 1" />
-      <p>НОВИНКА! Каритридж XROS</p>
-    </div>
-    <div class="news-card">
-      <img src="news2.JPEG" alt="Новость 2" />
-      <p>Доставка стала более выгодной</p>
-    </div>
-    <div class="news-card">
-      <img src="news3.JPEG" alt="Новость 3" />
-      <p>Больше выгоды с бонусной системой</p>
-    </div>
-  </div>
+  <form id="orderForm">
+    <label for="items">Позиции (наименование и вкус)</label>
+    <textarea id="items" placeholder="Пример: Elf Bar 5000, вкус: клубника арбуз" required></textarea>
 
-  <div class="button-group">
-    <button onclick="location.href='cat.html'">Каталог</button>
-    <button onclick="location.href='bonus.html'">Бонусный магазин</button>
-  </div>
+    <label for="username">Юзернейм клиента (@username)</label>
+    <input type="text" id="username" placeholder="@example" />
+
+    <label for="phone">Номер для связи</label>
+    <input type="tel" id="phone" placeholder="+7 777 123 4567" required />
+
+    <label for="address">Адрес доставки</label>
+    <textarea id="address" placeholder="г. Алматы, ул. Абая 10" required></textarea>
+
+    <label for="payment">Способ оплаты</label>
+    <select id="payment" required>
+      <option value="">Выберите способ оплаты</option>
+      <option value="Kaspi">Kaspi</option>
+      <option value="Наличные">Наличные</option>
+      <option value="Forte">Forte</option>
+      <option value="Halyk">Halyk</option>
+    </select>
+
+    <label for="sum">Сумма заказа (в ₸)</label>
+    <input type="number" id="sum" placeholder="Например: 14000" required />
+
+    <button type="submit">📦 Оформить</button>
+  </form>
 
   <script>
-    // Автопрокрутка новостей
-    const carousel = document.getElementById("carousel");
-    let scrollIndex = 0;
+    document.getElementById("orderForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-    setInterval(() => {
-      scrollIndex++;
-      if (scrollIndex >= carousel.children.length) {
-        scrollIndex = 0;
+      const data = {
+        items: document.getElementById("items").value.trim(),
+        username: document.getElementById("username").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        address: document.getElementById("address").value.trim(),
+        payment: document.getElementById("payment").value,
+        sum: document.getElementById("sum").value.trim(),
+      };
+
+      try {
+        await fetch("/webapp-data", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        alert("Заказ отправлен! Менеджер скоро свяжется с вами.");
+        document.getElementById("orderForm").reset();
+      } catch (err) {
+        alert("Ошибка при отправке заказа.");
+        console.error(err);
       }
-      const cardWidth = carousel.children[0].offsetWidth + 16; // 16 — gap
-      carousel.scrollTo({ left: scrollIndex * cardWidth, behavior: "smooth" });
-    }, 5000);
+    });
   </script>
 </body>
 </html>
+
